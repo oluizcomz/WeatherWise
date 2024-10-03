@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherWise-front", "WeatherWise-front\WeatherWise-front.csproj", "{7CD22C40-0A02-46E9-BFC9-579D2784FA29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherWise-front", "WeatherWise-front\WeatherWise-front.csproj", "{7CD22C40-0A02-46E9-BFC9-579D2784FA29}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherWise_api", "WeatherWise_api\WeatherWise_api.csproj", "{EA14AE69-D362-40E2-9D69-E2EFABED3946}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7CD22C40-0A02-46E9-BFC9-579D2784FA29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CD22C40-0A02-46E9-BFC9-579D2784FA29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CD22C40-0A02-46E9-BFC9-579D2784FA29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA14AE69-D362-40E2-9D69-E2EFABED3946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA14AE69-D362-40E2-9D69-E2EFABED3946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA14AE69-D362-40E2-9D69-E2EFABED3946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA14AE69-D362-40E2-9D69-E2EFABED3946}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
