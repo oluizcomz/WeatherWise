@@ -1,4 +1,5 @@
 using Auth0.AspNetCore.Authentication;
+using WeatherWise_front.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient<RestCountriesService>();
 
 var app = builder.Build();
 

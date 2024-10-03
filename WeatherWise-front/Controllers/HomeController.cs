@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WeatherWise_front.Models;
+using WeatherWise_front.Services;
 
 namespace WeatherWise_front.Controllers
 {
@@ -9,14 +10,18 @@ namespace WeatherWise_front.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly RestCountriesService _restCountriesService;
+
+        public HomeController(ILogger<HomeController> logger, RestCountriesService restCountriesService)
         {
             _logger = logger;
+            _restCountriesService = restCountriesService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Country> countries = await _restCountriesService.GetCountries(); 
+            return View(countries);
         }
 
         [Authorize]
@@ -30,5 +35,6 @@ namespace WeatherWise_front.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }
