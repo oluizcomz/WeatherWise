@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json.Linq;
 using WeatherWise_front.Models;
 
 namespace WeatherWise_front.Services
@@ -36,6 +37,13 @@ namespace WeatherWise_front.Services
 
                     foreach (var countryData in countriesData)
                     {
+                        string capital = countryData["capital"]?.ToString();
+                        if (!string.IsNullOrEmpty(capital))
+                        {
+                            JArray capitalArray = JArray.Parse(capital);
+                           capital = capitalArray.Count > 0 ? capitalArray[0].ToString() : string.Empty;
+                        }
+
                         var country = new Country
                         {
                             //Name = countryData["name"]?["common"]?.ToString(),
@@ -43,7 +51,7 @@ namespace WeatherWise_front.Services
                                    ?? countryData["name"]?["common"]?.ToString(),
                             Alpha2Code = countryData["cca2"]?.ToString(),
                             Alpha3Code = countryData["cca3"]?.ToString(),
-                            Capital = countryData["capital"]?.ToString(),
+                            Capital = capital,
                             Population = countryData["population"]?.ToObject<long>() ?? 0,
                             Languages = countryData["languages"]?.ToObject<Dictionary<string, string>>()?.Values.ToArray(),
                             Currencies = countryData["currencies"]?.ToObject<Dictionary<string, JObject>>()?.Values.Select(c => c["name"]?.ToString()).ToArray()

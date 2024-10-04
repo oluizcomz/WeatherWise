@@ -1,4 +1,7 @@
 using Auth0.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using WeatherWise_front.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,19 +12,19 @@ builder.Services
         options.Domain = builder.Configuration["Auth0:Domain"];
         options.ClientId = builder.Configuration["Auth0:ClientId"];
         options.Scope = "openid profile email";
+        options.ClientSecret = builder.Configuration["Auth0:ClientSecret"];
+        options.ResponseType = OpenIdConnectResponseType.Code;
     });
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddHttpClient<RestCountriesService>();
+builder.Services.AddHttpClient<FavoriteService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

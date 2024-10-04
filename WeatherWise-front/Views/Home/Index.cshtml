@@ -1,53 +1,227 @@
 ﻿@{
     ViewData["Title"] = "WeatherWise";
 }
-@model List<WeatherWise_front.Models.Country>
+
+@model WeatherWise_front.Models.HomeModelView
 
 <div class="text-center">
-   @if (User.Identity.IsAuthenticated)
-    {
-            <span>teste</span>
-    }
-
-    <select id="countrySelect" onchange="fetchWeather()">
+    <select id="countrySelect" class="form-select form-select-lg mb-3" onchange="showInfoCountry(@User.Identity.IsAuthenticated.ToString().ToLower())">
         <option value="">Selecione o pais</option>
-        @foreach (var country in Model)
+        @foreach (var country in Model.Countries)
         {
             <option value="@country.Alpha2Code">@country.Name</option>
         }
     </select>
+    
     <div id="weatherResult"></div>
+    
+    <div class="container-fluid mt-5">
+
+        <div id="dynamicCarousel" class="carousel slide col-md-12" data-bs-ride="carousel">
+            <div class="carousel-inner" id="carouselItems">
+                
+
+            </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <button class="carousel-control-prev" type="button" data-bs-target="#dynamicCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#dynamicCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            }
+        </div>
+
+    </div>
 </div>
+<style>
+    .card {
+    background-color: #fff;
+    border-radius: 10px;
+    border: none;
+    position: relative;
+    margin-bottom: 30px;
+    box-shadow: 0 0.46875rem 2.1875rem rgba(90, 97, 105, 0.1), 0 0.9375rem 1.40625rem rgba(90, 97, 105, 0.1), 0 0.25rem 0.53125rem rgba(90, 97, 105, 0.12), 0 0.125rem 0.1875rem rgba(90, 97, 105, 0.1);
+}
+
+.card .card-icon {
+    text-align: center;
+    line-height: 50px;
+    padding-right: 4rem;
+    color: red;
+    position: absolute;
+    right: 8rem;
+    top: 20px;
+    opacity: 0.7;
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+.toggle-icon {
+    cursor: pointer;
+    font-size: 4rem;
+    width: fit-content;
+}
+
+.l-bg-blue-dark {
+        background: linear-gradient(to right, #373b44, #635dff) !important;
+        color: #fff !important;
+}
+
+.noMoreInfo i {
+    display: block; 
+}
+
+.noMoreInfo .moreInfo {
+    display: none;
+}
+
+.showMoreInfo i {
+    display: none !important; 
+}
+
+.showMoreInfo .info {
+    display: block; 
+}
+</style>
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
-        console.log('luiz');
-        const countries = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
-        async function fetchWeather() {
+        let cardCounter = 2;
+        console.log('luizcount', cardCounter);
+        const countries = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Countries));
+
+        ///Adicona um novo card com as informações(nome pais, capital,idiomas e moeda) do pais selecionad
+        function showInfoCountry(isAuthenticated) {
             const select = document.getElementById('countrySelect');
             const countryCode = select.value;
-            const selectedCountry = countries.find(country => country.Alpha2Code === countryCode);// mostar na tela sem temperatura
+            const selectedCountry = countries.find(country => country.Alpha2Code === countryCode);
+            const carouselItems = document.getElementById('carouselItems');
+            const dynamicCarousel = new bootstrap.Carousel('#dynamicCarousel');
+            const newItem = document.createElement('div');
+            if(!isAuthenticated){
+                carouselItems.innerHTML = '';
+                newItem.classList.add('carousel-item', 'active');
+                cardCounter = 2
+            }
 
-            const countryName = selectedCountry.Name;
-            const capitalArray = selectedCountry.Capital ? JSON.parse(selectedCountry.Capital) : [];
-            const capital = capitalArray.length > 0 ? capitalArray[0] : ''
-            if (countryName && capital) {
+
+            newItem.innerHTML = `
+                <div class="card l-bg-blue-dark">
+                    <div class="card-body p-4">
+                                ${isAuthenticated ? `
+                        <div class="card-icon card-icon-large" title="Adicionar aos favoritos" onclick="changeFavorite(this, '${selectedCountry.Alpha2Code}')">
+                            <i class="bi bi-heart"></i>
+                        </div>
+                        ` : ''}
+                        <h2 class="card-title mb-4 country">${selectedCountry.Name}</h2>
+                        <div class="row gx-4 align-items-center mb-2 d-flex" >
+                            <div class="col-sm-12 col-md-7 text-start" style="padding: 0 8rem;">
+                                <p class="row align-items-center capital">Capital: ${selectedCountry.Capital}</p>
+                                <p class="row align-items-center">População: ${selectedCountry.Population} habitantes</p>
+                                <p class="row align-items-center">Idiomas: ${selectedCountry.Languages.join(', ')}</p>
+                                <p class="row align-items-center">Moedas: ${selectedCountry.Currencies.join(', ')}</p>
+                            </div>
+                            <div class="col-sm-12 col-md-5 noMoreInfo" id="${selectedCountry.Alpha2Code}MoreInfo" style="padding: 0 8rem;">
+                                <i class="bi bi-moisture toggle-icon d-flex align-items-center" title="Mais informações" onclick="toggleInfo('${selectedCountry.Alpha2Code}', '${selectedCountry.Name}','${selectedCountry.Capital}')"></i>
+                                    <div class="moreInfo text-start" id="${selectedCountry.Alpha2Code}Temp">
+                                            <div class="spinner-border" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            carouselItems.appendChild(newItem);
+            dynamicCarousel.to(cardCounter - 1);
+
+            cardCounter++;
+        }
+
+        // faz a requicição das informações de temperatura do pais escolhido
+        async function getchWeather(id, country, capital) {
+            if (country && capital) {
 
                 try {
-                    const response = await axios.get(`https://localhost:7055/WeatherForecast?country=${countryName}&capital=${encodeURIComponent(capital)}`, {
+                    const response = await axios.get(`https://localhost:7055/WeatherForecast?country=${encodeURIComponent(country)}&capital=${encodeURIComponent(capital)}`, {
                         headers: {
                             'accept': '*/*'
                         }
                     });
 
-                    // Exibir os resultados
-                    document.getElementById('weatherResult').innerHTML = JSON.stringify(response.data, null, 2);
+                    // Acessando os dados corretamente a partir de response.data
+                    const duvWeather = document.getElementById(id);
+                    if (response.data) {
+                        duvWeather.innerHTML = `<h5 class="row align-items-center">Temperatura: ${response.data.temperature}°C</h5>
+                                                <p class="row align-items-center">${response.data.description}</p>`;
+                    } else {
+                        duvWeather.innerHTML = 'Dados de clima indisponíveis.';
+                    }
                 } catch (error) {
                     console.error('Erro ao buscar o clima:', error);
                     document.getElementById('weatherResult').innerHTML = 'Erro ao buscar o clima.';
                 }
             } else {
                 document.getElementById('weatherResult').innerHTML = '';
+            }
+        }
+
+        ///Mostra as informações de temperatura do pais selecionado
+        async function toggleInfo(id, country, capital) {
+            const info = document.getElementById(id+'MoreInfo');
+            if (info) {
+                info.classList.remove('noMoreInfo'); 
+                info.classList.add('showMoreInfo');
+            }
+            await getchWeather(id + 'Temp', country, capital);
+        }
+        async function changeFavorite(element, codCountry) {
+            const icon = element.querySelector('i');
+            if (icon.classList.contains('bi-heart')) {
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill');
+                await addFavorite(codCountry);
+            } else {
+                icon.classList.remove('bi-heart-fill');
+                icon.classList.add('bi-heart');
+                await removeFavorite(codCountry);
+            }
+        }
+
+        async function addFavorite(codCountry) {
+            try {
+                const response = await $.ajax({
+                    url: '@Url.Action("AddFavorite", "Home")',
+                    type: 'POST',
+                    data: { countryId: codCountry }
+                });
+
+                if (!response.success) {
+                    alert(response.message);
+                }
+            } catch (error) {
+                alert('An error occurred while adding the country to favorites.');
+            }
+        }
+
+        // Função para remover um país dos favoritos
+        async function removeFavorite(codCountry) {
+            try {
+                const response = await $.ajax({
+                    url: '/Home/RemoveFavorite',  
+                    type: 'DELETE',
+                    data: { countryId: codCountry }
+                });
+            } catch (error) {
+                alert('Failed to remove favorite. Error: ' + error); 
             }
         }
     </script>
