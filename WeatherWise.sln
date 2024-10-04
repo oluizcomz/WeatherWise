@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherWise-front", "Weathe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherWise_api", "WeatherWise_api\WeatherWise_api.csproj", "{EA14AE69-D362-40E2-9D69-E2EFABED3946}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherWise.tests", "WeatherWise.tests\WeatherWise.tests.csproj", "{43BCFEEE-939B-4CC3-8AB7-F0DCD2C97A22}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EA14AE69-D362-40E2-9D69-E2EFABED3946}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA14AE69-D362-40E2-9D69-E2EFABED3946}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA14AE69-D362-40E2-9D69-E2EFABED3946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BCFEEE-939B-4CC3-8AB7-F0DCD2C97A22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BCFEEE-939B-4CC3-8AB7-F0DCD2C97A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BCFEEE-939B-4CC3-8AB7-F0DCD2C97A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BCFEEE-939B-4CC3-8AB7-F0DCD2C97A22}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

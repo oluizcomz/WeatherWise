@@ -14,7 +14,7 @@ namespace WeatherWise_api.Controllers
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly IWeatherService _weatherService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IWeatherService weatherService, IFavoriteRepository favoriteRepository)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, WeatherService weatherService)
         {
             _logger = logger;
             _weatherService = weatherService;

@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
         builder => builder
-            .WithOrigins("https://localhost:44333")
+            .WithOrigins("https://localhost:7170")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
@@ -32,6 +32,7 @@ builder.Services.AddSingleton<IAmazonDynamoDB, AmazonDynamoDBClient>();
 
 builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
 builder.Services.AddSingleton<IFavoriteRepository, FavoriteRepository>();
+
 
 var app = builder.Build();
 app.UseCors("AllowSpecificOrigin");

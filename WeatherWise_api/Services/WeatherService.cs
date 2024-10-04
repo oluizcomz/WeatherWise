@@ -37,7 +37,7 @@ namespace WeatherWise_api.Services
                     var weatherInfo = new WeatherInfo
                     {
                         Temperature = weatherData["main"]?["temp"]?.ToObject<double>() ?? 0,
-                        WeatherDescription = weatherData["weather"]?[0]?["description"]?.ToString(),
+                        Description = weatherData["weather"]?[0]?["description"]?.ToString(),
                     };
 
                     return weatherInfo;

@@ -3,6 +3,6 @@
     public class WeatherInfo
     {
         public double Temperature { get; set; }
-        public string WeatherDescription { get; set; }
+        public string Description { get; set; }
     }
 }
