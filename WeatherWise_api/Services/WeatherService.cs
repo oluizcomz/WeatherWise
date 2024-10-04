@@ -14,7 +14,6 @@ namespace WeatherWise_api.Services
             _logger = logger;
             _apiKey = Environment.GetEnvironmentVariable("ApiKeyOW");
 
-            // Adicione uma verificação para ver se a chave foi lida corretamente
             if (string.IsNullOrEmpty(_apiKey))
             {
                 throw new Exception("A chave da API não foi encontrada. Verifique se a variável de ambiente ApiKeyOW está definida.");
